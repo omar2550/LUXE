@@ -25,17 +25,17 @@ const authService = {
       throw error;
     }
   },
-  refreshToken: async () => {
-    try {
-      const { data } = await api.post("/auth/refresh-token");
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  },
+  // refreshToken: async () => {
+  //   try {
+  //     const { data } = await api.post("/auth/refresh-token");
+  //     return data;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // },
   getProfile: async () => {
     try {
-      const { data } = await api.post("/auth/get-profile");
+      const { data } = await api.get("/auth/get-profile");
       return data;
     } catch (error) {
       throw error;

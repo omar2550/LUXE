@@ -71,7 +71,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req.cookies["refresh-token"];
 
     if (refreshToken) {
       const decoded = jwt.verify(
@@ -92,7 +92,7 @@ export const logout = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req.cookies["refresh-token"];
 
     if (!refreshToken)
       return res.status(401).json({ message: "No refresh token provided" });
@@ -103,7 +103,7 @@ export const refreshToken = async (req, res) => {
     if (refreshToken !== storedToken)
       return res.status(401).json({ message: "Invalid refresh token" });
 
-    regenerateAccessToken(decoded.userId);
+    regenerateAccessToken(res, decoded.userId);
 
     res.json({ message: "Token refreshed successfully" });
   } catch (error) {

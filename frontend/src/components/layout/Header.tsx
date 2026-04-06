@@ -17,9 +17,8 @@ import {
 } from "../ui/navigation-menu";
 import { useUser } from "@/hooks/useAuth";
 
-const Header = () => {
+const Header = ({ user }: { user: any }) => {
   const location = useLocation();
-  const { data: user } = useUser();
 
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const searchRef = useRef<null | HTMLDivElement>(null);
@@ -68,16 +67,18 @@ const Header = () => {
           >
             Categories
           </Link>
-          <Link
-            to={"/dashboard"}
-            className={
-              location.pathname === "/dashboard"
-                ? "text-primary underline-offset-4 underline"
-                : ""
-            }
-          >
-            Dashboard
-          </Link>
+          {user?.role === "admin" && (
+            <Link
+              to={"/dashboard"}
+              className={
+                location.pathname === "/dashboard"
+                  ? "text-primary underline-offset-4 underline"
+                  : ""
+              }
+            >
+              Dashboard
+            </Link>
+          )}
         </div>
 
         {/* Search */}
@@ -161,7 +162,9 @@ const Header = () => {
                 <ul className="min-w-36 xs:min-w-60">
                   <ListItem href="/products" title="Products" />
                   <ListItem href="/categories" title="Categories" />
-                  <ListItem href="/" title="/" />
+                  {user?.role === "admin" && (
+                    <ListItem href="/dashboard" title="Dashboard" />
+                  )}
                   {/* <ListItem href="/" title={} > */}
                   <li>
                     <AnimatePresence mode="popLayout">

@@ -18,30 +18,65 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-export const getFeaturedProducts = async (req, res) => {
+export const getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) return res.status(404).json({ message: "Not Found" }).lean();
+
+    res.status(200).json(product);
+  } catch (error) {
+    console.log("Error In getProduct Controller", error.message);
+    res
+      .status(500)
+      .json({ message: `Error In getProduct Controller ${error.message}` });
+  }
+};
+
+export const getFeaturedProducts = async (_, res) => {
   try {
     let featureProducts = await redis.get("featuredProducts");
-    if (featureProducts)
-      return res.status(200).json(JSON.parse(featureProducts));
+
+    if (featureProducts) {
+      if (typeof featureProducts === "string") {
+        try {
+          const parsedData = JSON.parse(featureProducts);
+          if (Array.isArray(parsedData) && parsedData.length > 0) {
+            return res.status(200).json(parsedData);
+          }
+        } catch (e) {
+          console.error("Redis parse error, clearing key...");
+          await redis.del("featuredProducts");
+        }
+      } else if (Array.isArray(featureProducts) && featureProducts.length > 0) {
+        return res.status(200).json(featureProducts);
+      }
+    }
 
     featureProducts = await Product.find({ isFeatured: true }).lean();
 
     if (!featureProducts) return res.status(404).json({ message: "Not Found" });
 
-    await redis.set("featuredProducts", JSON.stringify(getFeaturedProducts));
+    await redis.set("featuredProducts", JSON.stringify(featureProducts));
 
     res.status(200).json(featureProducts);
   } catch (error) {
-    console.log("Error In getAllProducts Controller", error.message);
-    res
-      .status(500)
-      .json({ error: `Error In getAllProducts Controller ${error}` });
+    console.log("Error In getFeaturedProducts Controller", error.message);
+    res.status(500).json({
+      error: `Error In getFeaturedProducts Controller ${error.message}`,
+    });
   }
 };
 
 export const getProductsByCategory = async (req, res) => {
   try {
-    const category = req.params;
+    const { category } = req.params;
 
     const products = await Product.find({ category });
 
@@ -117,7 +152,8 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, images, price, category, stock } = req.body;
+    const { name, description, images, price, category, stock, isFeatured } =
+      req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(400).json({ message: "Invalid ID" });
@@ -125,7 +161,7 @@ export const updateProduct = async (req, res) => {
     // [ ] TODO
     // we will need to delete the previous Image if updated
 
-    let updatedData = { name, description, price, category, stock };
+    let updatedData = { name, description, price, category, stock, isFeatured };
 
     if (images && Array.isArray(images) && images.length > 0) {
       const uploadPromises = images.map((img) =>
@@ -135,11 +171,13 @@ export const updateProduct = async (req, res) => {
       updatedData.images = uploadResults.map((res) => res.secure_url);
     }
 
-    const product = await Product.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    });
+    const product = await Product.findByIdAndUpdate(id, updatedData);
 
     if (!product) return res.status(404).json({ message: "Not Found" });
+
+    if (product.isFeatured !== isFeatured) {
+      await updateFeaturedProductsCache();
+    }
 
     res.status(200).json({ product, message: "Product Updated Successfully" });
   } catch (error) {

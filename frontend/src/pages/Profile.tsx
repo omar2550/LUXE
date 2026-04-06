@@ -3,23 +3,14 @@ import { useLogout, useUser } from "@/hooks/useAuth";
 import {
   User,
   Package,
-  Settings,
   LogOut,
   ChevronRight,
   Mail,
   Calendar,
 } from "lucide-react";
 
-const Profile = () => {
+const Profile = ({ user }: { user: any }) => {
   const { mutate, isPending } = useLogout();
-
-  const { data: user } = useUser();
-  //   const user = {
-  //     name: "Omar Ali",
-  //     email: "omar.design@luxe.com",
-  //     joinedDate: "March 2024",
-  //     role: "Premium Member",
-  //   };
 
   return (
     <div className="min-h-screen bg-surface text-on-surface font-body p-6 md:p-12">

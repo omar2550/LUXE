@@ -1,11 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Categories from "./pages/Categories";
-import ProductsByCat from "./pages/ProductsByCat";
+// import ProductsByCat from "./pages/ProductsByCat";
 import Layout from "./components/layout/Layout";
 import AuthLayout from "./components/layout/AuthLayout";
 import Login from "./pages/Login";
@@ -15,35 +14,47 @@ import Profile from "./pages/Profile";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import DashboardProducts from "./pages/DashboardProducts";
-
-const queryClient = new QueryClient();
+import AuthGate from "./components/layout/AuthGate";
+import { useUser } from "./hooks/useAuth";
+import RedirectIfAuth from "./components/layout/RedirectIfAuth";
+import NotFound from "./pages/NotFound";
+import DashboardCustomers from "./pages/DashboardCustomers";
+import DashboardSettings from "./pages/DashboardSettings";
 
 function App() {
+  const { data, isLoading, isSuccess } = useUser();
+
   return (
     <div className="font-display text-on-surface">
-      <QueryClientProvider client={queryClient}>
+      <AuthGate isLoading={isLoading}>
         <Routes>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<DashboardProducts />} />
+            <Route path="customers" element={<DashboardCustomers />} />
+            <Route path="settings" element={<DashboardSettings />} />
           </Route>
 
-          <Route path="/auth" element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<Signup />} />
+          <Route element={<RedirectIfAuth isSuccess={isSuccess} />}>
+            <Route path="/auth" element={<AuthLayout />}>
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<Signup />} />
+            </Route>
           </Route>
 
-          <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Layout user={data} />}>
             <Route index element={<Home />} />
-            <Route path="/products/:cat" element={<Products />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             {/* <Route path="/products/:cat" element={<ProductsByCat />} /> */}
             <Route path="/categories" element={<Categories />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile user={data} />} />
           </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </QueryClientProvider>
+      </AuthGate>
     </div>
   );
 }

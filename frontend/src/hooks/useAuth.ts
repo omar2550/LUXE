@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 export const useUser = () => {
   return useQuery({
-    queryKey: ["useUser"],
+    queryKey: ["profile"],
     queryFn: authService.getProfile,
     retry: false,
     staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };
 
@@ -81,11 +83,11 @@ export const useLogout = () => {
   });
 };
 
-export const useRefreshToken = () => {
-  return useMutation({
-    mutationFn: authService.refreshToken,
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "AUTH - ERROR!");
-    },
-  });
-};
+// export const useRefreshToken = () => {
+//   return useMutation({
+//     mutationFn: authService.refreshToken,
+//     onError: (error: any) => {
+//       toast.error(error.response?.data?.message || "AUTH - ERROR!");
+//     },
+//   });
+// };

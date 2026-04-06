@@ -12,12 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useProducts } from "@/hooks/useProduct";
+import { useProductsByCat } from "@/hooks/useProduct";
+import { useMemo, useState } from "react";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { data: productsData, isLoading: isProductLoading } = useProducts();
+  const [cat, setCat] = useState<string>("Clothing");
+
+  const { data: productsData, isLoading: isProductLoading } =
+    useProductsByCat(cat);
 
   const limit = 6;
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -27,7 +31,8 @@ const Products = () => {
 
   return (
     <section className="bg-surface px-4 py-16">
-      <div>
+      {/* header */}
+      <header>
         <h1 className="text-4xl xs:text-display-lg bg-signature-gradient bg-clip-text text-transparent font-bold">
           The Curated Edit
         </h1>
@@ -36,7 +41,7 @@ const Products = () => {
           architectural precision meets ethereal luxury. Each item is a
           testament to timeless craftsmanship.
         </p>
-      </div>
+      </header>
 
       <div className="grid sm:grid-cols-4 gap-4 mt-16">
         {/* Filters */}
@@ -76,29 +81,49 @@ const Products = () => {
             <p className="text-body-sm uppercase text-on-surface-variant">
               Category
             </p>
-            <div className="flex items-center justify-between mt-3 pr-5 cursor-pointer">
-              <span className="text-body-sm text-on-surface/50">
-                Leather Goods
+            <div className="mt-3 pr-5 cursor-pointer">
+              <span
+                className={`text-body-sm ${cat === "Clothing" ? "text-on-surface" : "text-on-surface/50"}`}
+                onClick={() => {
+                  setCat("Clothing");
+                  setSearchParams({ page: "1" });
+                }}
+              >
+                Clothing
               </span>
-              <span className="text-[9px] text-on-surface/30">24</span>
             </div>
-            <div className="flex items-center justify-between mt-2 pr-5 cursor-pointer">
-              <span className="text-body-sm text-on-surface/50">
-                Leather Goods
+            <div className="mt-2 pr-5 cursor-pointer">
+              <span
+                className={`text-body-sm ${cat === "Electronics" ? "text-on-surface" : "text-on-surface/50"}`}
+                onClick={() => {
+                  setCat("Electronics");
+                  setSearchParams({ page: "1" });
+                }}
+              >
+                Electronics
               </span>
-              <span className="text-[9px] text-on-surface/30">24</span>
             </div>
-            <div className="flex items-center justify-between mt-2 pr-5 cursor-pointer">
-              <span className="text-body-sm text-on-surface">
-                Leather Goods2
+            <div className="mt-2 pr-5 cursor-pointer">
+              <span
+                className={`text-body-sm ${cat === "Home Decor" ? "text-on-surface" : "text-on-surface/50"}`}
+                onClick={() => {
+                  setCat("Home Decor");
+                  setSearchParams({ page: "1" });
+                }}
+              >
+                Home Decor
               </span>
-              <span className="text-[9px] text-on-surface/30">24</span>
             </div>
-            <div className="flex items-center justify-between mt-2 pr-5 cursor-pointer">
-              <span className="text-body-sm text-on-surface/50">
-                Leather Goods
+            <div className="mt-2 pr-5 cursor-pointer">
+              <span
+                className={`text-body-sm ${cat === "Furniture" ? "text-on-surface" : "text-on-surface/50"}`}
+                onClick={() => {
+                  setCat("Furniture");
+                  setSearchParams({ page: "1" });
+                }}
+              >
+                Furniture
               </span>
-              <span className="text-[9px] text-on-surface/30">24</span>
             </div>
           </div>
         </div>
@@ -106,11 +131,11 @@ const Products = () => {
         {/* Products */}
         <div className="sm:col-span-3">
           <div className="xs:flex items-center justify-between -mt-1.5 mb-5">
-            <p className="text-body-sm text-on-surface/50">
+            <p className={`text-body-sm text-on-surface/50`}>
               Showing {"58"} Pieces
             </p>
             <div className="flex items-center gap-1 xs:-mt-2">
-              <span className="text-body-sm text-on-surface/50">
+              <span className={`text-body-sm text-on-surface/50`}>
                 SORT<span className="text-[16px] font-bold">:</span>
               </span>
               <Select>
@@ -135,7 +160,7 @@ const Products = () => {
 
           <div className="grid xs:grid-cols-2 md:grid-cols-3 gap-4">
             {isProductLoading
-              ? Array(6).map((_, i) => (
+              ? Array.from({ length: 6 }).map((_, i) => (
                   <div key={i + i + "sk"} className="w-full">
                     <Skeleton className="aspect-[3/4] w-full" />
                     <div className="mt-4 flex flex-col gap-1 px-2">

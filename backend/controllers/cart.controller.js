@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Product from "../models/product.model.js";
 
 export const getCartProducts = async (req, res) => {
   try {
@@ -23,7 +24,7 @@ export const addToCart = async (req, res) => {
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId, "cartItems.product": { $ne: productId } },
       { $push: { cartItems: { product: productId } } },
-      { new: true },
+      { returnDocument: "after" },
     ).populate("cartItems.product");
 
     if (!updatedUser) {

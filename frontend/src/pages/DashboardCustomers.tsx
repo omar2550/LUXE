@@ -1,6 +1,6 @@
 import ComingSoon from "./ComingSoon";
 
-const Dashboard = () => {
+const DashboardCustomers = () => {
   return (
     <>
       <ComingSoon />
@@ -8,4 +8,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardCustomers;

@@ -7,7 +7,13 @@ interface Image {
   file: string;
 }
 
-const ImageInput = ({ onChange }: { onChange: (images: string[]) => void }) => {
+const ImageInput = ({
+  onChange,
+  pImages,
+}: {
+  onChange: (images: string[]) => void;
+  pImages?: Image[];
+}) => {
   const MAX_IMAGES = 4;
 
   const [images, setImages] = useState<Image[]>([]);
@@ -66,6 +72,10 @@ const ImageInput = ({ onChange }: { onChange: (images: string[]) => void }) => {
       processFile(e.dataTransfer.files);
     }
   };
+
+  useEffect(() => {
+    if (pImages) setImages(pImages);
+  }, []);
 
   useEffect(() => {
     onChange(images.map((img) => img.file));

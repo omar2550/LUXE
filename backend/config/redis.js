@@ -1,7 +1,7 @@
-import { Redis } from '@upstash/redis'
-import { configDotenv } from 'dotenv';
+import { Redis } from "@upstash/redis";
+import { configDotenv } from "dotenv";
 
 configDotenv();
-const redis = Redis.fromEnv()
+const redis = Redis.fromEnv();
 
 export default redis;

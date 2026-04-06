@@ -18,6 +18,7 @@ import {
   useCreateProduct,
   useDeleteProduct,
   useProducts,
+  useUpdateProduct,
 } from "@/hooks/useProduct";
 import { useState } from "react";
 import AppAlertDialog from "@/components/AppAlertDialog";
@@ -40,20 +41,24 @@ const itemVariants: any = {
 };
 
 const DashboardProducts = () => {
-  const { mutate, isPending, isSuccess } = useCreateProduct();
+  const { data: products, isLoading } = useProducts();
 
+  const { mutate, isPending, isSuccess } = useCreateProduct();
   const handelCreateProduct = (data: productType) => {
     mutate(data);
   };
 
-  const { data: products, isLoading } = useProducts();
   const [product, setProduct] = useState<productType | null>(null);
 
   const { mutate: mutateDelete } = useDeleteProduct();
   const [openDelete, setOpenDelete] = useState<boolean>(false);
-
   const handelDeleteProduct = (id: string) => {
     mutateDelete(id);
+  };
+
+  const { mutate: mutateUpdate } = useUpdateProduct();
+  const handelUpdateProduct = (id: string, data: productType) => {
+    mutateUpdate({ id, data });
   };
 
   return (
@@ -68,6 +73,7 @@ const DashboardProducts = () => {
         onOpenChange={(open) => !open && setProduct(null)}
         title="Product Info"
         product={product}
+        onSubmit={(data) => handelUpdateProduct(product?._id, data)}
       />
 
       <AppAlertDialog open={openDelete} onOpenChange={setOpenDelete} />
@@ -102,7 +108,6 @@ const DashboardProducts = () => {
         {["Total Assets", "Live Stock", "Low Supply"].map((label, i) => (
           <motion.div key={i} variants={itemVariants} whileHover={{ y: -5 }}>
             <Card className="glass ghost-border p-6 flex items-center gap-4 relative overflow-hidden group">
-              {/* تأثير لمعة خفيفة عند الهوفر */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               <div className="p-3 rounded-xl bg-primary/10 text-primary">
                 <Package size={24} />
@@ -149,46 +154,12 @@ const DashboardProducts = () => {
                 <AnimatePresence>
                   {products &&
                     products?.map((product) => (
-                      <motion.tr
+                      <ProductRow
                         key={product._id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        whileHover={{
-                          backgroundColor: "rgba(250 250 250, 0.03)",
-                        }}
-                        className="border-outline-variant group transition-colors"
-                      >
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-3">
-                            <div className="size-10 rounded-lg bg-surface-container-highest ghost-border overflow-hidden p-1">
-                              <div className="size-full bg-signature-gradient opacity-20 rounded-sm" />
-                            </div>
-                            {product.name}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-on-surface-variant text-xs">
-                          {product.category}
-                        </TableCell>
-                        <TableCell className="font-display font-semibold">
-                          ${product.price}
-                        </TableCell>
-                        <TableCell className="font-display font-semibold">
-                          {product.stock}
-                        </TableCell>
-                        <TableCell className=" text-on-surface/50">
-                          <Edit
-                            size={18}
-                            className="inline-block mx-2 cursor-pointer hover:text-tertiary transition-all duration-300"
-                            onClick={() => setProduct(product)}
-                          />
-                          <Trash2
-                            size={18}
-                            className="inline-block cursor-pointer hover:text-destructive transition-all duration-300"
-                            onClick={() => setOpenDelete(true)}
-                          />
-                        </TableCell>
-                      </motion.tr>
+                        product={product}
+                        onEdit={setProduct}
+                        onDelete={setOpenDelete}
+                      />
                     ))}
                 </AnimatePresence>
               </TableBody>
@@ -201,3 +172,54 @@ const DashboardProducts = () => {
 };
 
 export default DashboardProducts;
+
+const ProductRow = ({
+  product,
+  onEdit,
+  onDelete,
+}: {
+  product: productType;
+  onEdit: any;
+  onDelete: any;
+}) => {
+  return (
+    <motion.tr
+      key={product._id}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      whileHover={{ backgroundColor: "rgba(250 250 250, 0.03)" }}
+      className="border-outline-variant group transition-colors"
+    >
+      <TableCell className="font-medium">
+        <div className="flex items-center gap-3">
+          <div className="size-10 rounded-lg bg-surface-container-highest ghost-border overflow-hidden p-1">
+            <div className="size-full bg-signature-gradient opacity-20 rounded-sm" />
+          </div>
+          {product.name}
+        </div>
+      </TableCell>
+      <TableCell className="text-on-surface-variant text-xs">
+        {product.category}
+      </TableCell>
+      <TableCell className="font-display font-semibold">
+        ${product.price}
+      </TableCell>
+      <TableCell className="font-display font-semibold">
+        {product.stock}
+      </TableCell>
+      <TableCell className="text-on-surface/50">
+        <Edit
+          size={18}
+          className="inline-block mx-2 cursor-pointer hover:text-tertiary transition-all duration-300"
+          onClick={() => onEdit(product)}
+        />
+        <Trash2
+          size={18}
+          className="inline-block cursor-pointer hover:text-destructive transition-all duration-300"
+          onClick={() => onDelete(true)}
+        />
+      </TableCell>
+    </motion.tr>
+  );
+};

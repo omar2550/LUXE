@@ -1,8 +1,11 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
+import { useProduct } from "@/hooks/useProduct";
 
 const Hero = () => {
+  const { data } = useProduct("69d2a67139868d6fb9dbad3a");
+
   return (
     <section className="relative content-center overflow-hidden bg-surface-container-low min-h-screen ">
       {/* Glow 1 */}
@@ -44,18 +47,20 @@ const Hero = () => {
 
         <div className="sm:w-1/2 aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] max-h-[90vh] relative overflow-hidden">
           <img
-            src="/bg2.png"
-            alt="image"
+            src={data?.images[0]}
+            alt={data?.images[0]}
             className="h-full w-full object-cover object-center mx-auto rounded-lg ghost-border !border-4"
           />
           <div className="glass rounded-lg absolute bottom-3 left-3 w-[90%] p-5">
             <span className="uppercase text-body-sm tracking-widest text-primary">
-              new arrival
+              From The Owner
             </span>
-            <h2 className="text-2xl">Aura V1 Sneakers</h2>
+            <h2 className="text-2xl line-clamp-1">{data?.name}</h2>
             <div className="flex items-center justify-between">
-              <p className="tracking-widest text-on-surface-variant">$800</p>
-              <Link to={"/"}>
+              <p className="tracking-widest text-on-surface-variant">
+                ${data?.price}
+              </p>
+              <Link to={"/product/69d2a67139868d6fb9dbad3a"}>
                 <ArrowRight className="text-secondary" />
               </Link>
             </div>

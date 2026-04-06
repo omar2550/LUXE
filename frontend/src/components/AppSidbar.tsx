@@ -1,12 +1,5 @@
 // components/app-sidebar.tsx
-import {
-  LayoutDashboard,
-  ShoppingBag,
-  Users,
-  Settings,
-  ChevronUp,
-  UserCircle,
-} from "lucide-react";
+import { ChevronUp, UserCircle } from "lucide-react";
 
 import {
   Sidebar,
@@ -14,7 +7,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -23,14 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
 
-const menuItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Products", url: "/dashboard/products", icon: ShoppingBag },
-  { title: "Customers", url: "/customers", icon: Users },
-  { title: "Settings", url: "/settings", icon: Settings },
-];
-
-export function AppSidebar() {
+export function AppSidebar({ menuItems }) {
   const { pathname } = useLocation();
 
   return (

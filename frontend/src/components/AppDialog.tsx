@@ -27,7 +27,7 @@ const AppDialog = ({
 }: {
   children?: ReactElement;
   title: string;
-  onSubmit?: (data: productType) => void;
+  onSubmit: (data: productType) => void;
   disable?: boolean;
   isSuccess?: boolean;
   open?: boolean;
@@ -184,6 +184,9 @@ const AppDialog = ({
             className="w-full rounded-[10px] ghost-border bg-surface-container-low px-3 py-1 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm resize-none"
           ></textarea>
           <ImageInput
+            pImages={product?.images.map((img) => {
+              return { id: img, file: img };
+            })}
             onChange={(images: string[]) => {
               setFormData((prev) => ({ ...prev, images: images }));
             }}

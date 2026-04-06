@@ -13,46 +13,33 @@ export type productType = {
 
 const productService = {
   createProduct: async (product: productType) => {
-    try {
-      const { data } = await api.post("/product", product);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const { data } = await api.post("/product", product);
+    return data;
   },
   getProducts: async () => {
-    try {
-      const { data }: { data: productType[] } = await api.get("/product");
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const { data }: { data: productType[] } = await api.get("/product");
+    return data;
+  },
+  getFeaturedProducts: async () => {
+    const { data }: { data: productType[] } =
+      await api.get(`/product/featured`);
+    return data;
   },
   getProduct: async (id: string) => {
-    try {
-      const { data }: { data: productType[] } = await api.get(`/product/${id}`);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const { data }: { data: productType } = await api.get(`/product/${id}`);
+    return data;
   },
-  getProductByCat: async (cat: string) => {
-    try {
-      const { data }: { data: productType[] } = await api.get(
-        `/product/${cat}`,
-      );
-      console.log(data);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+  getProductsByCat: async (cat: string) => {
+    const { data }: { data: productType[] } = await api.get(
+      `/product/category/${cat}`,
+    );
+    return data;
+  },
+  updateProduct: async ({ id, data }: { id: string; data: productType }) => {
+    await api.patch(`/product/${id}`, data);
   },
   deleteProduct: async (id: string) => {
-    try {
-      await api.delete(`/product/${id}`);
-    } catch (error) {
-      throw error;
-    }
+    await api.delete(`/product/${id}`);
   },
 };
 
