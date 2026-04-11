@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useProductsByCat } from "@/hooks/useProduct";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();

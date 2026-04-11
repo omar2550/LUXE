@@ -24,22 +24,9 @@ const DashboardLayout = () => {
   return (
     <SidebarProvider className="bg-surface">
       <AppSidebar menuItems={menuItems} />
-
       <SidebarInset>
-        <main>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <Outlet />
-            </motion.div>
-          </AnimatePresence>
-          <Footer />
-        </main>
+        <Outlet />
+        <Footer />
       </SidebarInset>
     </SidebarProvider>
   );

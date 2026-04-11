@@ -7,8 +7,6 @@ import { Skeleton } from "../ui/skeleton";
 const Featured = () => {
   const { data, isLoading } = useFeaturedProducts();
 
-  console.log(data);
-
   return (
     <section className="py-16 bg-surface-container-low z-10 relative">
       <div className="px-4 mx-auto">

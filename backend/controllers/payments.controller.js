@@ -15,22 +15,37 @@ export const createCheckoutSession = async (req, res) => {
 
     let totalAmount = 0;
 
-    const lineItems = products.map((product) => {
-      const amount = (products.price * 100).toFixed(2);
-      totalAmount += amount * product.quantity;
+    const lineItems = products.map((p) => {
+      const amount = Math.round(p.product.price * 100);
+      totalAmount += amount * p.quantity;
 
       return {
         price_data: {
           currency: "usd",
           product_data: {
-            name: product.name,
-            image: product.image,
+            name: p.product.name,
+            images: p.product.images,
           },
           unit_amount: amount,
         },
-        quantity: product.quantity || 1,
+        quantity: p.quantity || 1,
       };
     });
+
+    const SHIPPING_FEE = 10;
+    lineItems.push({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: "Shipping Fee",
+          description: "Fixed shipping and handling fee",
+        },
+        unit_amount: SHIPPING_FEE * 100,
+      },
+      quantity: 1,
+    });
+
+    totalAmount += SHIPPING_FEE * 100;
 
     let coupon = null;
     if (couponCode) {
@@ -40,10 +55,9 @@ export const createCheckoutSession = async (req, res) => {
         isActive: true,
       });
       if (coupon) {
-        totalAmount -= (
-          (totalAmount * coupon.discountPercentage) /
-          100
-        ).toFixed(2);
+        totalAmount -= Math.round(
+          (totalAmount * coupon.discountPercentage) / 100,
+        );
       }
     }
 
@@ -52,7 +66,7 @@ export const createCheckoutSession = async (req, res) => {
       line_items: lineItems,
       mode: "payment",
       success_url: `${process.env.CLINT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLINT_URL}/purchase-cancel`,
+      cancel_url: `${process.env.CLINT_URL}/`,
       discounts: coupon
         ? [
             {
@@ -62,22 +76,21 @@ export const createCheckoutSession = async (req, res) => {
         : [],
       metadata: {
         userId: req.user._id.toString(),
-        coupon: couponCode || "",
+        couponCode: couponCode || "",
         products: JSON.stringify(
           products.map((p) => ({
-            id: p._id,
+            id: p.product._id,
             quantity: p.quantity,
-            price: p.price,
+            price: p.product.price,
           })),
         ),
       },
     });
 
-    if (totalAmount >= 50000) {
+    if (totalAmount >= 5000) {
       await createNewCoupon(req.user._id);
     }
-
-    res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
+    res.status(200).json({ url: session.url, totalAmount: totalAmount / 100 });
   } catch (error) {
     console.error("Error processing checkout:", error);
     res
@@ -89,6 +102,15 @@ export const createCheckoutSession = async (req, res) => {
 export const checkoutSuccess = async (req, res) => {
   try {
     const { sessionId } = req.body;
+
+    const existingOrder = await Order.findOne({ stripeSessionId: sessionId });
+
+    if (existingOrder) {
+      return res.status(200).json({
+        message: "Order already processed.",
+        orderId: existingOrder._id,
+      });
+    }
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status === "paid") {
@@ -105,10 +127,11 @@ export const checkoutSuccess = async (req, res) => {
 
       // create order
       const products = JSON.parse(session.metadata.products);
+
       const newOrder = new Order({
         user: session.metadata.userId,
         products: products.map((p) => ({
-          product: p._id,
+          product: p.id,
           price: p.price,
           quantity: p.quantity,
         })),

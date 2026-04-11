@@ -4,7 +4,6 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Categories from "./pages/Categories";
-// import ProductsByCat from "./pages/ProductsByCat";
 import Layout from "./components/layout/Layout";
 import AuthLayout from "./components/layout/AuthLayout";
 import Login from "./pages/Login";
@@ -20,6 +19,7 @@ import RedirectIfAuth from "./components/layout/RedirectIfAuth";
 import NotFound from "./pages/NotFound";
 import DashboardCustomers from "./pages/DashboardCustomers";
 import DashboardSettings from "./pages/DashboardSettings";
+import PurchaseSuccess from "./pages/PurchaseSuccess";
 
 function App() {
   const { data, isLoading, isSuccess } = useUser();
@@ -46,10 +46,10 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetails />} />
-            {/* <Route path="/products/:cat" element={<ProductsByCat />} /> */}
             <Route path="/categories" element={<Categories />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/profile" element={<Profile user={data} />} />
+            <Route path="/purchase-success" element={<PurchaseSuccess />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

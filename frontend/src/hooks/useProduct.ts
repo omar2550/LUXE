@@ -4,12 +4,14 @@ import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: productService.createProduct,
     onMutate: () => {
       toast.loading("Creating New Product...", { id: "createProduct" });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product Created Successfully", { id: "createProduct" });
     },
     onError: (error: AxiosError) => {
@@ -76,12 +78,14 @@ export const useUpdateProduct = () => {
 };
 
 export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: productService.deleteProduct,
     onMutate: () => {
       toast.loading("Deleting Product...", { id: "deleteProduct" });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product Deleted Successfully", { id: "deleteProduct" });
     },
     onError: (error: AxiosError) => {

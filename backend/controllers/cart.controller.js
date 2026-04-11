@@ -99,6 +99,23 @@ export const deleteCart = async (req, res) => {
     return res.status(200).json(updatedUser.cartItems);
   } catch (error) {
     console.log("Error In deleteCart Controller", error.message);
-    res.status(500).json({ error: `Error In deleteCart Controller ${error}` });
+    res
+      .status(500)
+      .json({ message: `Error In deleteCart Controller ${error.message}` });
+  }
+};
+
+export const removeAllFromCart = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    await User.findByIdAndUpdate(userId, { $set: { cartItems: [] } });
+
+    return res.status(200).json({ message: "Cart Cleaned Successfully" });
+  } catch (error) {
+    console.log("Error In deleteCart Controller", error.message);
+    res
+      .status(500)
+      .json({ message: `Error In deleteCart Controller ${error.message}` });
   }
 };

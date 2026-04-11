@@ -36,7 +36,7 @@ function AlertDialogOverlay({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-surface/20 backdrop-blur-sm"
+        className="fixed inset-0 z-50 bg-surface/20 backdrop-blur-sm"
       />
     </AlertDialogPrimitive.Backdrop>
   );

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useLogout, useUser } from "@/hooks/useAuth";
+import { useCoupon } from "@/hooks/useCoupon";
 import {
   User,
   Package,
@@ -11,6 +12,8 @@ import {
 
 const Profile = ({ user }: { user: any }) => {
   const { mutate, isPending } = useLogout();
+
+  const { data } = useCoupon();
 
   return (
     <div className="min-h-screen bg-surface text-on-surface font-body p-6 md:p-12">
@@ -71,7 +74,7 @@ const Profile = ({ user }: { user: any }) => {
 
           {/* Stats/Info Cards */}
           <section className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-6 bg-surface-container-low ghost-border rounded-xl space-y-4">
+            <div className="p-4 bg-surface-container-low ghost-border rounded-xl space-y-4">
               <h3 className="text-on-surface-variant text-sm uppercase tracking-widest">
                 Total Spent
               </h3>
@@ -81,14 +84,25 @@ const Profile = ({ user }: { user: any }) => {
               </div>
             </div>
 
-            <div className="p-6 bg-surface-container-low ghost-border rounded-xl space-y-4">
+            <div className="p-4 bg-surface-container-low ghost-border rounded-xl space-y-4">
               <h3 className="text-on-surface-variant text-sm uppercase tracking-widest">
-                Rewards Points
+                Reward Coupon
               </h3>
-              <p className="text-3xl font-display text-tertiary">840 pts</p>
-              <p className="text-body-sm text-on-surface-variant">
-                You're 160 points away from a 20% discount.
-              </p>
+              {data ? (
+                <>
+                  <p className="text-3xl font-display text-tertiary">
+                    {data?.code}
+                  </p>
+                  <p className="text-body-sm text-on-surface-variant">
+                    This Coupon Will Gives You 20% discount.
+                  </p>
+                </>
+              ) : (
+                <p className="text-body-sm text-on-surface-variant">
+                  You Don't have any Coupons Pay With $5000 or More To Get a New
+                  Coupon
+                </p>
+              )}
             </div>
           </section>
         </main>

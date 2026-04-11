@@ -29,4 +29,7 @@ export const cartService = {
   removeFromCart: async (id: string) => {
     await api.delete(`/cart/${id}`);
   },
+  removeAllCarts: async () => {
+    await api.delete("/cart");
+  },
 };

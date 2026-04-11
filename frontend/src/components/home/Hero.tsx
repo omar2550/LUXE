@@ -17,18 +17,17 @@ const Hero = () => {
       <div className="px-4 mx-auto flex sm:flex-row flex-col my-16 sm:my-0 sm:items-center justify-between gap-4 relative">
         <div>
           <h1 className="text-4xl sm:text-display-lg font-bold">
-            The Future of
+            Redefining the
             <br />
             <span className="bg-signature-gradient bg-clip-text text-transparent">
-              Elegance
+              Art of Luxury
             </span>
           </h1>
           <p className="text-body-sm text-on-surface-variant my-8 max-w-sm">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
-            eveniet quaerat nam possimus quod numquam optio aliquam quae ipsam
-            veritatis.
+            Discover a curated collection where timeless craftsmanship meets
+            modern sophistication. Elevate your presence with LUXE.
           </p>
-          <div className="flex items-center gap-3">
+          <div>
             <Link to={"/products"}>
               <Button
                 variant="default"
@@ -39,9 +38,6 @@ const Hero = () => {
                 Explore Collection
               </Button>
             </Link>
-            <Button size="lg" className={"glass"}>
-              View
-            </Button>
           </div>
         </div>
 

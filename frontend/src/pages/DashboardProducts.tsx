@@ -54,11 +54,21 @@ const DashboardProducts = () => {
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const handelDeleteProduct = (id: string) => {
     mutateDelete(id);
+    setOpenDelete(false);
+  };
+  const onDelete = (product: productType) => {
+    setOpenDelete(true);
+    setProduct(product);
   };
 
+  const [openUpdate, setOpenUpdate] = useState<boolean>(false);
   const { mutate: mutateUpdate } = useUpdateProduct();
   const handelUpdateProduct = (id: string, data: productType) => {
     mutateUpdate({ id, data });
+  };
+  const onUpdate = (product: productType) => {
+    setOpenUpdate(true);
+    setProduct(product);
   };
 
   return (
@@ -68,15 +78,21 @@ const DashboardProducts = () => {
       animate="visible"
       className="p-4 xs:p-6 space-y-8"
     >
+      {/* Edit Dialog */}
       <AppDialog
-        open={product !== null}
-        onOpenChange={(open) => !open && setProduct(null)}
+        open={openUpdate}
+        onOpenChange={() => setOpenUpdate(false)}
         title="Product Info"
         product={product}
         onSubmit={(data) => handelUpdateProduct(product?._id, data)}
       />
 
-      <AppAlertDialog open={openDelete} onOpenChange={setOpenDelete} />
+      {/* Delete Dialog */}
+      <AppAlertDialog
+        open={openDelete}
+        onOpenChange={setOpenDelete}
+        handelDeleteProduct={() => handelDeleteProduct(product?._id)}
+      />
 
       {/* --- Header Section --- */}
       <motion.div
@@ -157,8 +173,8 @@ const DashboardProducts = () => {
                       <ProductRow
                         key={product._id}
                         product={product}
-                        onEdit={setProduct}
-                        onDelete={setOpenDelete}
+                        onEdit={onUpdate}
+                        onDelete={onDelete}
                       />
                     ))}
                 </AnimatePresence>
@@ -179,8 +195,8 @@ const ProductRow = ({
   onDelete,
 }: {
   product: productType;
-  onEdit: any;
-  onDelete: any;
+  onEdit: (product: productType) => void;
+  onDelete: (product: productType) => void;
 }) => {
   return (
     <motion.tr
@@ -193,8 +209,12 @@ const ProductRow = ({
     >
       <TableCell className="font-medium">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-lg bg-surface-container-highest ghost-border overflow-hidden p-1">
-            <div className="size-full bg-signature-gradient opacity-20 rounded-sm" />
+          <div className="size-10 rounded-lg bg-surface-container-highest ghost-border overflow-hidden">
+            <img
+              src={product?.images[0]}
+              alt={product?.name}
+              className="object-cover object-center h-full w-full rounded-sm"
+            />
           </div>
           {product.name}
         </div>
@@ -217,7 +237,7 @@ const ProductRow = ({
         <Trash2
           size={18}
           className="inline-block cursor-pointer hover:text-destructive transition-all duration-300"
-          onClick={() => onDelete(true)}
+          onClick={() => onDelete(product)}
         />
       </TableCell>
     </motion.tr>

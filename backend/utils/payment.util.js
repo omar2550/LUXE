@@ -11,6 +11,10 @@ export const createStripeCoupon = async (discountPercentage) => {
 };
 
 export const createNewCoupon = async (userId) => {
+  if (await Coupon.findOne({ userId: userId, isActive: true })) {
+    return;
+  }
+
   const newCoupon = await Coupon({
     code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
     discountPercentage: 10,
