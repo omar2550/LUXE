@@ -1,7 +1,7 @@
 import express from "express";
 import { configDotenv } from "dotenv";
 import cookieParser from "cookie-parser";
-import core from "cors";
+import cors from "cors";
 
 import connectDB from "./config/db.js";
 
@@ -17,14 +17,12 @@ configDotenv();
 const app = express();
 const port = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== "production") {
   app.use(
-    core({
-      origin: "http://localhost:5173",
+    cors({
+      origin: process.env.CLINT_URL,
       credentials: true,
     }),
   );
-}
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
