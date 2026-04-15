@@ -39,7 +39,7 @@ const ProductCard = ({ product }: { product: productType }) => {
 
         {product.isFeatured && (
           <span className="absolute -top-3 right-0 text-[10px] font-display font-bold tracking-[0.2em] text-tertiary uppercase">
-            New
+            Featured
           </span>
         )}
       </div>

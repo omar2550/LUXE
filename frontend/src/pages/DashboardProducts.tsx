@@ -22,6 +22,7 @@ import {
 } from "@/hooks/useProduct";
 import { useState } from "react";
 import AppAlertDialog from "@/components/AppAlertDialog";
+import { SearchModal } from "@/components/SearchModal";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -43,13 +44,16 @@ const itemVariants: any = {
 const DashboardProducts = () => {
   const { data: products, isLoading } = useProducts();
 
+  // Handel Create Product
   const { mutate, isPending, isSuccess } = useCreateProduct();
   const handelCreateProduct = (data: productType) => {
     mutate(data);
   };
 
+  // Delete && Update Helper State
   const [product, setProduct] = useState<productType | null>(null);
 
+  // Handel Delete Product
   const { mutate: mutateDelete } = useDeleteProduct();
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const handelDeleteProduct = (id: string) => {
@@ -61,6 +65,7 @@ const DashboardProducts = () => {
     setProduct(product);
   };
 
+  // Handel Update Product
   const [openUpdate, setOpenUpdate] = useState<boolean>(false);
   const { mutate: mutateUpdate } = useUpdateProduct();
   const handelUpdateProduct = (id: string, data: productType) => {
@@ -70,6 +75,8 @@ const DashboardProducts = () => {
     setOpenUpdate(true);
     setProduct(product);
   };
+
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
 
   return (
     <motion.div
@@ -93,6 +100,9 @@ const DashboardProducts = () => {
         onOpenChange={setOpenDelete}
         handelDeleteProduct={() => handelDeleteProduct(product?._id)}
       />
+
+      {/* Search Dialog */}
+      <SearchModal open={isSearchOpen} setOpen={setIsSearchOpen} />
 
       {/* --- Header Section --- */}
       <motion.div
@@ -151,6 +161,7 @@ const DashboardProducts = () => {
               <Input
                 placeholder="Search..."
                 className="pl-10 bg-surface-container-low border-none focus-visible:ring-1 focus-visible:ring-primary/50"
+                onClick={() => setIsSearchOpen(true)}
               />
             </div>
           </div>

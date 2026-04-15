@@ -15,25 +15,12 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
-import { useUser } from "@/hooks/useAuth";
+import { SearchModal } from "../SearchModal";
 
 const Header = ({ user }: { user: any }) => {
   const location = useLocation();
 
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
-  const searchRef = useRef<null | HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handelClickOutSide = (e: MouseEvent | TouchEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node))
-        setIsSearchOpen(false);
-    };
-
-    document.addEventListener("pointerdown", handelClickOutSide);
-
-    return () =>
-      document.removeEventListener("pointerdown", handelClickOutSide);
-  }, [isSearchOpen]);
 
   return (
     <header className="bg-surface ghost-border !border-t-0 !border-x-0 sticky top-0 left-0 py-2 px-4 z-50 w-full">
@@ -83,38 +70,18 @@ const Header = ({ user }: { user: any }) => {
 
         {/* Search */}
         <div className="flex items-center gap-4 text-on-surface-variant">
-          <AnimatePresence mode="popLayout">
-            {!isSearchOpen && (
-              <motion.div
-                key="search-icon"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.15 }}
-                onClick={() => setIsSearchOpen(true)}
-                className="cursor-pointer duration-300 transition-all hover:text-primary"
-              >
-                <Search size={16} />
-              </motion.div>
-            )}
-            {isSearchOpen && (
-              <motion.div
-                key="search-input"
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 250, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                ref={searchRef}
-              >
-                <InputGroup className="ghost-border">
-                  <InputGroupInput autoFocus placeholder="Search..." />
-                  <InputGroupAddon className="w-7 h-7">
-                    <Search size={14} />
-                  </InputGroupAddon>
-                </InputGroup>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <motion.div
+            key="search-icon"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => setIsSearchOpen(true)}
+            className="cursor-pointer duration-300 transition-all hover:text-primary"
+          >
+            <Search size={16} />
+          </motion.div>
+          <SearchModal open={isSearchOpen} setOpen={setIsSearchOpen} />
           {user ? (
             <>
               <Link
@@ -167,47 +134,17 @@ const Header = ({ user }: { user: any }) => {
                   )}
                   {/* <ListItem href="/" title={} > */}
                   <li>
-                    <AnimatePresence mode="popLayout">
-                      {!isSearchOpen && (
-                        <motion.div
-                          key="search-icon"
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.8 }}
-                          transition={{ duration: 0.15 }}
-                          onClick={() => setIsSearchOpen(true)}
-                          // className="cursor-pointer p-2 duration-300 transition-all hover:text-primary"
-                          className="flex items-center gap-2 rounded-lg p-2 text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-md data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4"
-                        >
-                          <Search size={14} />
-                        </motion.div>
-                      )}
-                      {isSearchOpen && (
-                        <motion.div
-                          key="search-input"
-                          initial={{ width: 0, opacity: 0 }}
-                          animate={{ width: 230, opacity: 1 }}
-                          exit={{ width: 0, opacity: 0 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 30,
-                          }}
-                          ref={searchRef}
-                        >
-                          <InputGroup className="ghost-border bg-surface-variant">
-                            <InputGroupInput
-                              autoFocus
-                              placeholder="Search..."
-                              className=""
-                            />
-                            <InputGroupAddon className="w-5 h-5">
-                              <Search />
-                            </InputGroupAddon>
-                          </InputGroup>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <motion.div
+                      key="search-icon"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.15 }}
+                      onClick={() => setIsSearchOpen(true)}
+                      className="flex items-center gap-2 rounded-lg p-2 text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-md data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4"
+                    >
+                      <Search size={14} />
+                    </motion.div>
                   </li>
                   {user && (
                     <ListItem href="/cart" title="">

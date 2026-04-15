@@ -37,7 +37,7 @@ const Categories = () => {
               <Skeleton className="aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] object-cover object-center w-full rounded-md ghost-border !border-2 sm:!border-4 shadow-inner" />
             </>
           ) : (
-            <Link to={"/products?Clothing"}>
+            <Link to={"/products?cat=Clothing"}>
               <img
                 src={clothing[0]?.images[0]}
                 alt={clothing[0]?.images[0]}
@@ -63,7 +63,7 @@ const Categories = () => {
               <Skeleton className="aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] object-cover object-center w-full rounded-md ghost-border !border-2 sm:!border-4 shadow-inner" />
             </>
           ) : (
-            <Link to={"/products?Electronics"}>
+            <Link to={"/products?cat=Electronics"}>
               <img
                 src={electronics[0]?.images[0]}
                 alt={electronics[0]?.images[0]}
@@ -87,7 +87,7 @@ const Categories = () => {
               <Skeleton className="aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] object-cover object-center w-full rounded-md ghost-border !border-2 sm:!border-4 shadow-inner" />
             </>
           ) : (
-            <Link to={"/products?Home-Decor"}>
+            <Link to={"/products?cat=Home-Decor"}>
               <img
                 src={homeDecor[0]?.images[0]}
                 alt={homeDecor[0]?.images[0]}
@@ -163,7 +163,7 @@ const Categories = () => {
           {isFurnitureLoading ? (
             <Skeleton className="aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] object-cover object-center w-full rounded-md ghost-border !border-2 sm:!border-4 shadow-inner" />
           ) : (
-            <Link to={"/products?Furniture"}>
+            <Link to={"/products?cat=Furniture"}>
               <img
                 src={furniture[0]?.images[0]}
                 alt={furniture[0]?.images[0]}

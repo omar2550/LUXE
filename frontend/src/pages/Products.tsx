@@ -13,12 +13,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useProductsByCat } from "@/hooks/useProduct";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [cat, setCat] = useState<string>("Clothing");
+  const [cat, setCat] = useState<string>(searchParams.get("cat") || "Clothing");
 
   const { data: productsData, isLoading: isProductLoading } =
     useProductsByCat(cat);

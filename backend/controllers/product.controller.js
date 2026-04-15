@@ -4,6 +4,7 @@ import cloudinary from "../config/cloudinary.js";
 import redis from "../config/redis.js";
 import Product from "../models/product.model.js";
 import { updateFeaturedProductsCache } from "../utils/product.util.js";
+import algolia from "../config/algolia.js";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -138,6 +139,18 @@ export const createProduct = async (req, res) => {
       category,
       images: imageUrls,
       stock: stock,
+    });
+
+    await algolia.saveObject({
+      indexName: "products",
+      body: {
+        objectID: product._id.toString(),
+        name: product.name,
+        price: product.price,
+        image: product.images[0],
+        category: product.category,
+        description: product.description.substring(0, 200),
+      },
     });
 
     res.status(201).json({ product, message: "Product Created Successfully" });
