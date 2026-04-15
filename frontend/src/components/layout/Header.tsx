@@ -132,7 +132,6 @@ const Header = ({ user }: { user: any }) => {
                   {user?.role === "admin" && (
                     <ListItem href="/dashboard" title="Dashboard" />
                   )}
-                  {/* <ListItem href="/" title={} > */}
                   <li>
                     <motion.div
                       key="search-icon"
@@ -152,7 +151,7 @@ const Header = ({ user }: { user: any }) => {
                     </ListItem>
                   )}
                   {user && (
-                    <ListItem href="/cart" title="">
+                    <ListItem href="/profile" title="">
                       <User2 size={16} />
                     </ListItem>
                   )}
