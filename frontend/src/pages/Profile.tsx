@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useLogout, useUser } from "@/hooks/useAuth";
+import { useLogout } from "@/hooks/useAuth";
 import { useCoupon } from "@/hooks/useCoupon";
 import {
   User,

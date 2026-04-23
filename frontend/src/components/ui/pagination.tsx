@@ -130,16 +130,18 @@ type PagePaginationTypes = {
   currentPage: number;
   totalPages: number;
   setSearchParams: SetURLSearchParams;
+  cat: string;
 };
 
 const PagePagination = ({
   currentPage,
   totalPages,
   setSearchParams,
+  cat,
 }: PagePaginationTypes) => {
   const handelPageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      setSearchParams({ page: String(newPage) });
+      setSearchParams({ page: String(newPage), cat: cat });
     }
   };
 
@@ -186,7 +188,7 @@ const PagePagination = ({
                 ? "text-on-surface-variant/40 pointer-events-none"
                 : ""
             }
-            to={`/products?page=${currentPage - 1}`}
+            to={`/products?page=${currentPage - 1}&cat=${cat}`}
           />
         </PaginationItem>
         {paginationItems.map((item: number | string, i) => {
@@ -207,7 +209,7 @@ const PagePagination = ({
             >
               <PaginationLink
                 isActive={currentPage === item}
-                to={`/products?page=${item}`}
+                to={`/products?page=${item}&cat=${cat}`}
               >
                 {item}
               </PaginationLink>

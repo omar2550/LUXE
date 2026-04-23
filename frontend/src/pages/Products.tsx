@@ -1,24 +1,23 @@
 import ProductCard from "@/components/ProductCard";
 import { PagePagination } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Slider } from "@/components/ui/slider";
+// import { Slider } from "@/components/ui/slider";
 import { useSearchParams } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { useProductsByCat } from "@/hooks/useProduct";
-import { useEffect, useState } from "react";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [cat, setCat] = useState<string>(searchParams.get("cat") || "Clothing");
+  const cat = searchParams.get("cat") || "Clothing";
 
   const { data: productsData, isLoading: isProductLoading } =
     useProductsByCat(cat);
@@ -47,7 +46,7 @@ const Products = () => {
         {/* Filters */}
         <div className="sm:col-span-1">
           {/* Price */}
-          <div>
+          {/* <div>
             <p className="text-body-sm uppercase text-on-surface-variant">
               Price range
             </p>
@@ -61,10 +60,10 @@ const Products = () => {
               <span>$5</span>
               <span>+$10,000</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Palette */}
-          <div className="mt-5">
+          {/* <div className="mt-5">
             <p className="text-body-sm uppercase text-on-surface-variant">
               Palette
             </p>
@@ -74,7 +73,7 @@ const Products = () => {
               <div className="w-5 h-5 mt-3 cursor-pointer rounded-full border border-transparent outline outline-transparent bg-blue-700" />
               <div className="w-5 h-5 mt-3 cursor-pointer rounded-full border border-transparent outline outline-transparent bg-yellow-500" />
             </div>
-          </div>
+          </div> */}
 
           {/* Category */}
           <div className="mt-5">
@@ -85,8 +84,7 @@ const Products = () => {
               <span
                 className={`text-body-sm ${cat === "Clothing" ? "text-on-surface" : "text-on-surface/50"}`}
                 onClick={() => {
-                  setCat("Clothing");
-                  setSearchParams({ page: "1" });
+                  setSearchParams({ page: "1", cat: "Clothing" });
                 }}
               >
                 Clothing
@@ -96,8 +94,7 @@ const Products = () => {
               <span
                 className={`text-body-sm ${cat === "Electronics" ? "text-on-surface" : "text-on-surface/50"}`}
                 onClick={() => {
-                  setCat("Electronics");
-                  setSearchParams({ page: "1" });
+                  setSearchParams({ page: "1", cat: "Electronics" });
                 }}
               >
                 Electronics
@@ -107,8 +104,7 @@ const Products = () => {
               <span
                 className={`text-body-sm ${cat === "Home Decor" ? "text-on-surface" : "text-on-surface/50"}`}
                 onClick={() => {
-                  setCat("Home Decor");
-                  setSearchParams({ page: "1" });
+                  setSearchParams({ page: "1", cat: "Home Decor" });
                 }}
               >
                 Home Decor
@@ -118,8 +114,7 @@ const Products = () => {
               <span
                 className={`text-body-sm ${cat === "Furniture" ? "text-on-surface" : "text-on-surface/50"}`}
                 onClick={() => {
-                  setCat("Furniture");
-                  setSearchParams({ page: "1" });
+                  setSearchParams({ page: "1", cat: "Furniture" });
                 }}
               >
                 Furniture
@@ -132,9 +127,9 @@ const Products = () => {
         <div className="sm:col-span-3">
           <div className="xs:flex items-center justify-between -mt-1.5 mb-5">
             <p className={`text-body-sm text-on-surface/50`}>
-              Showing {"58"} Pieces
+              Showing {productsData?.length} Pieces
             </p>
-            <div className="flex items-center gap-1 xs:-mt-2">
+            {/* <div className="flex items-center gap-1 xs:-mt-2">
               <span className={`text-body-sm text-on-surface/50`}>
                 SORT<span className="text-[16px] font-bold">:</span>
               </span>
@@ -155,26 +150,27 @@ const Products = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
           </div>
 
           <div className="grid xs:grid-cols-2 md:grid-cols-3 gap-4">
             {isProductLoading
               ? Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i + i + "sk"} className="w-full">
-                    <Skeleton className="aspect-[3/4] w-full" />
-                    <div className="mt-4 flex flex-col gap-1 px-2">
-                      <Skeleton className="h-4 w-2/3" />
-                      <Skeleton className="h-4 w-1/2" />
-                    </div>
+                <div key={i + i + "sk"} className="w-full">
+                  <Skeleton className="aspect-[3/4] w-full" />
+                  <div className="mt-4 flex flex-col gap-1 px-2">
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-4 w-1/2" />
                   </div>
-                ))
+                </div>
+              ))
               : productsData
-                  .slice(startIndex, endIndex)
-                  .map((p, i) => <ProductCard product={p} key={i} />)}
+                .slice(startIndex, endIndex)
+                .map((p, i) => <ProductCard product={p} key={i} />)}
           </div>
           <div className="mt-6">
             <PagePagination
+              cat={cat}
               currentPage={currentPage}
               totalPages={totalPages}
               setSearchParams={setSearchParams}

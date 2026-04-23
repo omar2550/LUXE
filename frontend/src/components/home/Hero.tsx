@@ -15,7 +15,7 @@ const Hero = () => {
       <div className="absolute bottom-5 left-5 w-[250px] h-[250px] bg-secondary/30 rounded-full blur-[120px]" />
 
       <div className="px-4 mx-auto flex sm:flex-row flex-col my-16 sm:my-0 sm:items-center justify-between gap-4 relative">
-        <div>
+        <div className="xl:ml-6">
           <h1 className="text-4xl sm:text-display-lg font-bold">
             Redefining the
             <br />

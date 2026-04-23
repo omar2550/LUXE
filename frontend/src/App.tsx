@@ -28,6 +28,7 @@ function App() {
     <div className="font-display text-on-surface">
       <AuthGate isLoading={isLoading}>
         <Routes>
+
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<DashboardProducts />} />

@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -28,8 +30,22 @@ const Testimonials = () => {
       </div>
 
       {/* Subscribe */}
-      <div className="px-8 sm:px-12 py-7 sm:py-14 mt-20 mx-auto w-[90%] rounded-2xl glass sm:flex items-center justify-between flex-wrap space-y-8">
-        <div>
+      <div className="relative overflow-hidden opacity-30 px-8 sm:px-12 py-7 sm:py-14 mt-20 mx-auto w-[90%] rounded-2xl glass sm:flex items-center justify-between flex-wrap pointer-events-none">
+        <motion.div
+          className="absolute inset-0 z-10"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2) 50%, transparent)",
+            skewX: -20,
+          }}
+          initial={{ x: "-100%" }}
+          animate={{ x: "100%" }}
+          transition={{
+            repeat: Infinity,
+            duration: 3,
+            ease: "linear",
+          }}
+        />
+        <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold">
             A Welcome Gift
             <br />

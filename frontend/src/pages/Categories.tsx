@@ -31,7 +31,7 @@ const Categories = () => {
       </div>
 
       <div className="sm:grid grid-cols-3 space-y-4 sm:space-y-0 gap-4 mt-16">
-        <div className="relative col-span-2">
+        <div className="relative col-span-2 max-h-[60vh]">
           {isClothingLoading ? (
             <>
               <Skeleton className="aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] object-cover object-center w-full rounded-md ghost-border !border-2 sm:!border-4 shadow-inner" />
@@ -41,7 +41,7 @@ const Categories = () => {
               <img
                 src={clothing[0]?.images[0]}
                 alt={clothing[0]?.images[0]}
-                className="bg-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
+                className="object-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
               />
               <div className="glass rounded-md absolute bottom-5 left-3 w-[90%] p-3 xs:p-5 flex items-center justify-between">
                 <div>
@@ -67,7 +67,7 @@ const Categories = () => {
               <img
                 src={electronics[0]?.images[0]}
                 alt={electronics[0]?.images[0]}
-                className="bg-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
+                className="object-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
               />
               <div className="glass rounded-[10px] absolute bottom-5 left-3 w-[90%] p-3 xs:p-5">
                 <h2 className="text-lg xs:text-2xl">Electronics</h2>
@@ -91,7 +91,7 @@ const Categories = () => {
               <img
                 src={homeDecor[0]?.images[0]}
                 alt={homeDecor[0]?.images[0]}
-                className="bg-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
+                className="object-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
               />
               <div className="glass rounded-xl absolute top-5 right-3 p-2">
                 <h2 className="text-sm">Home</h2>
@@ -109,7 +109,7 @@ const Categories = () => {
               <img
                 src={furniture[2]?.images[0]}
                 alt="image"
-                className="bg-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
+                className="object-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
               />
               <div
                 className="glass rounded-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit p-3 
@@ -147,7 +147,7 @@ const Categories = () => {
               <img
                 src={homeDecor[0]?.images[0]}
                 alt="image"
-                className="bg-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
+                className="object-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
               />
               <div className="glass rounded-md absolute bottom-5 left-3 w-[90%] p-3">
                 <h2 className="text-lg">Coming Soon</h2>
@@ -167,7 +167,7 @@ const Categories = () => {
               <img
                 src={furniture[0]?.images[0]}
                 alt={furniture[0]?.images[0]}
-                className="bg-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
+                className="object-cover w-full h-full rounded-md ghost-border !border-2 xs:!border-4"
               />
               <div className="glass rounded-md absolute bottom-5 left-1/2 -translate-x-1/2 w-[90%] text-center p-3">
                 <h2 className="text-sm uppercase">Furniture</h2>

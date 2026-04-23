@@ -13,9 +13,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
+import { useUser } from "@/hooks/useAuth";
 
 export function AppSidebar({ menuItems }) {
   const { pathname } = useLocation();
+  const { data } = useUser()
 
   return (
     <Sidebar variant="sidebar" collapsible="icon" className="relative">
@@ -93,12 +95,12 @@ export function AppSidebar({ menuItems }) {
             >
               <UserCircle className="size-5" />
               <div className="flex flex-col items-start text-sm">
-                <span className="font-medium text-on-surface">Omar Ali</span>
-                <span className="text-xs text-on-surface-variant">
-                  Admin Account
+                <span className="font-medium text-on-surface">{data.name}</span>
+                <span className="text-xs text-on-surface-variant capitalize">
+                  {data.role} Account
                 </span>
               </div>
-              <ChevronUp className="ml-auto size-4 text-on-surface-variant" />
+              {/* <ChevronUp className="ml-auto size-4 text-on-surface-variant" /> */}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

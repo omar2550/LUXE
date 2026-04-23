@@ -14,7 +14,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-  const { mutate, isPending, isError } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   const handelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

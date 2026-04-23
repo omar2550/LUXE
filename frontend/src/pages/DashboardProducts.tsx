@@ -43,6 +43,12 @@ const itemVariants: any = {
 
 const DashboardProducts = () => {
   const { data: products, isLoading } = useProducts();
+  const stats = {
+    "Total Products": products?.length,
+    "Live Stock": products?.reduce((c, p) => p.stock + c, 0),
+    "Total Prices": (products?.reduce((c, p) => p.price + c, 0) / 1000).toFixed(2) + "K",
+
+  }
 
   // Handel Create Product
   const { mutate, isPending, isSuccess } = useCreateProduct();
@@ -131,18 +137,18 @@ const DashboardProducts = () => {
 
       {/* --- Stats Cards --- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {["Total Assets", "Live Stock", "Low Supply"].map((label, i) => (
+        {["Total Products", "Live Stock", "Total Prices"].map((label, i) => (
           <motion.div key={i} variants={itemVariants} whileHover={{ y: -5 }}>
             <Card className="glass ghost-border p-6 flex items-center gap-4 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               <div className="p-3 rounded-xl bg-primary/10 text-primary">
                 <Package size={24} />
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-[10px] text-on-surface-variant uppercase tracking-widest">
                   {label}
                 </p>
-                <p className="text-2xl font-display font-bold">1,280</p>
+                <p className="text-2xl font-display font-bold">{stats[label]}</p>
               </div>
             </Card>
           </motion.div>

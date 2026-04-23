@@ -24,7 +24,7 @@ export const useSignup = () => {
       toast.loading("Creating account...", { id: "signup" });
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["useUser"], data.user);
+      queryClient.setQueryData(["profile"], data.user);
       // Please verify your email
       toast.success(
         `Welcome, ${data.user?.name || ""}! Explore the collection.`,
@@ -51,8 +51,8 @@ export const useLogin = () => {
       toast.loading("Logging in...", { id: "login" });
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["useUser"], data.user);
-      toast.success("Welcome Back", { id: "login" });
+      queryClient.setQueryData(["profile"], data.user);
+      toast.success(`Welcome Back, ${data.user?.name || ""}`, { id: "login" });
       navigate("/");
     },
     onError: (error: any) => {
@@ -71,8 +71,8 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: authService.logout,
     onSuccess: () => {
+      queryClient.setQueryData(["profile"], null);
       toast.success("Logged out Successfully", { id: "Logout" });
-      queryClient.clear();
       navigate("/");
     },
     onError: (error: any) => {
@@ -82,12 +82,3 @@ export const useLogout = () => {
     },
   });
 };
-
-// export const useRefreshToken = () => {
-//   return useMutation({
-//     mutationFn: authService.refreshToken,
-//     onError: (error: any) => {
-//       toast.error(error.response?.data?.message || "AUTH - ERROR!");
-//     },
-//   });
-// };
