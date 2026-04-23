@@ -23,7 +23,7 @@ export const usePaymentSuccess = () => {
     mutationFn: paymentService.paymentSuccess,
     retry: false,
     onSuccess: (data) => {
-      console.log("الداتا وصلت هنا فوراً:", data);
+      console.log("here:", data);
       return data;
     },
     onError: (error) => {

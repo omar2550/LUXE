@@ -24,7 +24,10 @@ export const paymentService = {
   },
 
   paymentSuccess: async (sessionId: string) => {
-    const { data } = await api.get(`/payments/checkout-success?sessionId=${sessionId}`);
+    const { data } = await api.get(
+      `/payments/checkout-success?sessionId=${sessionId}`,
+    );
+    console.log("full response:", data);
     cartService.removeAllCarts();
     return data.orderId;
   },
