@@ -23,7 +23,7 @@ const PurchaseSuccess = () => {
     visible: { opacity: 1, y: 0 },
   };
 
-  const { mutate } = usePaymentSuccess();
+  const { mutateAsync, data } = usePaymentSuccess();
   const [searchParams] = useSearchParams();
   const hasCalled = useRef(false);
 
@@ -32,9 +32,10 @@ const PurchaseSuccess = () => {
 
     if (sessionId && !hasCalled.current) {
       hasCalled.current = true;
-      mutate(sessionId);
+      mutateAsync(sessionId);
     }
-  }, [searchParams, mutate]);
+
+  }, [searchParams, mutateAsync]);
 
   return (
     <div className="bg-surface flex items-center justify-center xs:p-6 p-4 relative overflow-hidden">
@@ -89,7 +90,7 @@ const PurchaseSuccess = () => {
         >
           <div className="flex flex-col xs:flex-row gap-2 items-center justify-between">
             <p className="text-body-sm text-on-surface/50">Order Number</p>
-            <span className="text-tertiary ">#123asd</span>
+            <span className="text-tertiary ">{data || "000"}</span>
           </div>
           <div className="flex flex-col xs:flex-row gap-2 items-center justify-between">
             <p className="text-body-sm text-on-surface/50">

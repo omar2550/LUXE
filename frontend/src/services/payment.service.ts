@@ -24,7 +24,8 @@ export const paymentService = {
   },
 
   paymentSuccess: async (sessionId: string) => {
-    await api.post("/payments/checkout-success", { sessionId });
+    const { data } = await api.get(`/payments/checkout-success?sessionId=${sessionId}`);
     cartService.removeAllCarts();
+    return data.orderId;
   },
 };

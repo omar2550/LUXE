@@ -19,12 +19,14 @@ export const usePayment = () => {
 };
 
 export const usePaymentSuccess = () => {
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: paymentService.paymentSuccess,
     retry: false,
+    onSuccess: (data) => {
+      console.log("الداتا وصلت هنا فوراً:", data);
+      return data;
+    },
     onError: (error) => {
-      // navigate("/");
       toast.error(
         "Some Thing Wrong Please Tray Again Later: " + error?.message,
         { id: "paymentSuccess" },

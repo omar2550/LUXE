@@ -101,7 +101,11 @@ export const createCheckoutSession = async (req, res) => {
 
 export const checkoutSuccess = async (req, res) => {
   try {
-    const { sessionId } = req.body;
+    const { sessionId } = req.query; 
+
+    if (!sessionId) {
+       return res.status(400).json({ message: "Session ID is required" });
+    }
 
     const existingOrder = await Order.findOne({ stripeSessionId: sessionId });
 
